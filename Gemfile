@@ -4,6 +4,8 @@ gem 'rake'
 gem 'sinatra'
 gem 'pivotal-tracker', git: "https://github.com/amair/pivotal-tracker"
 gem 'haml'
+
+gem 'pg'
 gem 'sequel'
 
 group :development do
