@@ -3,6 +3,21 @@ namespace :pt do
 
   desc "Capture current iteration status"
   task :capture do
+    DB = Sequel.connect(ENV['DATABASE_URL'])
+    metrics = DB[:metrics]
+
+    metrics.insert(
+      unstarted:  PT.sum("unstarted"),
+      started:    PT.sum("started"),
+      finished:   PT.sum("finished"),
+      delivered:  PT.sum("delivered"),
+      accepted:   PT.sum("accepted"),
+      rejected:   PT.sum("rejected"),
+      project_id: ENV['PIVOTAL_PROJECTIDS'],
+      created_at: Time.now.utc
+    )
+
+    puts "Metrics saved."
   end
 end
 
