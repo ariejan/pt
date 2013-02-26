@@ -10,7 +10,7 @@ get '/' do
   metrics = DB[:metrics]
 
   @latest_iteration = metrics.max(:iteration)
-  @data = metrics.where(:iteration => @latest_iteration).reverse_order(:created_at)
+  @data = metrics.where(:iteration => @latest_iteration).order(:created_at)
 
   haml :index
 end
