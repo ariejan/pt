@@ -19,15 +19,16 @@
       google.load("visualization", "1", { packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
 
-      var data = google.visualization.arrayToDataTable(chartData);
 
       function drawChart() {
+        var data = google.visualization.arrayToDataTable(chartData);
+
         var options = {
           isStacked: true,
           hAxis: { title: 'Day' }
         };
 
-      var chart = new google.visualization.ColumnChart(
-        document.getElementById('chart'));
-        chart.draw(data, options);
+        var chart = new google.visualization.ColumnChart(
+          document.getElementById('chart'));
+          chart.draw(data, options);
       }
