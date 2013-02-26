@@ -2,13 +2,13 @@ require 'pivotal-tracker'
 require 'sequel'
 
 module PT
-  def projects
-    @projects ||= begin
+  def project
+    @project ||= begin
       token = ENV.fetch("PIVOTAL_TOKEN")
-      projects = ENV.fetch("PIVOTAL_PROJECTS").split(",").map { |e| e.to_i }
+      project_id = ENV.fetch("PIVOTAL_PROJECTS").to_i
 
       PivotalTracker::Client.token = token
-      projects.map &PivotalTracker::Project.public_method(:find)
+      project = PivotalTracker::Project.find(project_id)
     end
   end
 
@@ -48,12 +48,13 @@ module PT
     @iteration_number ||= ENV.fetch('OFFSET', 0).to_i
   end
 
-  def current_iteration(project)
-    project.iterations.current_backlog(project).fetch(iteration_number)
+  def current_iteration
+    @current_iteration ||= project.iterations.current_backlog(project).fetch(iteration_number)
   end
 
   def current_stories
-    @current_stories ||= projects.inject([]) { |all, project| all + current_iteration(project).stories }
+    # @current_stories ||= projects.inject([]) { |all, project| all + current_iteration(project).stories }
+    @current_stories ||= current_iteration.stories
   end
 
   extend self

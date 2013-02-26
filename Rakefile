@@ -1,25 +1,46 @@
 namespace :pt do
-  require './pivotal'
 
   desc "Capture current iteration status"
   task :capture do
-    puts "Connection to database"
-    DB = Sequel.connect(ENV['DATABASE_URL'])
-    metrics = DB[:metrics]
+    require './pivotal'
 
-    puts "Capturing data..."
-    metrics.insert(
-      unstarted:  PT.sum("unstarted"),
-      started:    PT.sum("started"),
-      finished:   PT.sum("finished"),
-      delivered:  PT.sum("delivered"),
-      accepted:   PT.sum("accepted"),
-      rejected:   PT.sum("rejected"),
-      project_id: ENV['PIVOTAL_PROJECTS'].to_i,
-      created_at: Time.now.utc
-    )
+    if ENV.fetch('DATABASE_URL', nil).nil?
+      puts "No database configured. Outputting to STDOUT"
 
-    puts "Metrics saved."
+      puts PT.current_iteration.number
+      puts PT.current_iteration.start
+      puts PT.current_iteration.finish
+
+      puts PT.sum("unstarted")
+      puts PT.sum("started")
+      puts PT.sum("finished")
+      puts PT.sum("delivered")
+      puts PT.sum("accepted")
+      puts PT.sum("rejected")
+      puts ENV['PIVOTAL_PROJECTS'].to_i
+      puts Time.now.utc
+    else
+      puts "Connecting to database"
+      DB = Sequel.connect(ENV['DATABASE_URL'])
+      metrics = DB[:metrics]
+
+      puts "Capturing data..."
+      metrics.insert(
+        unstarted:           PT.sum("unstarted"),
+        started:             PT.sum("started"),
+        finished:            PT.sum("finished"),
+        delivered:           PT.sum("delivered"),
+        accepted:            PT.sum("accepted"),
+        rejected:            PT.sum("rejected"),
+        project_id:          ENV['PIVOTAL_PROJECTS'].to_i,
+        created_at:          Time.now.utc,
+        iteration:           PT.current_iteration.number,
+        iteration_starts_on: PT.current_iteration.start
+        iteration_ends_on:   PT.current_iteration.finish
+      )
+
+      puts "Metrics saved."
+    end
   end
 end
 
@@ -27,7 +48,7 @@ namespace :db do
   require "sequel"
   namespace :migrate do
     Sequel.extension :migration
-    DB = Sequel.connect(ENV['DATABASE_URL'])
+    DB = Sequel.connect(ENV['DATABASE_URL']) unless ENV.fetch('DATABASE_URL', nil).nil?
  
     desc "Perform migration reset (full erase and migration up)"
     task :reset do
