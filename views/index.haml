@@ -4,6 +4,13 @@
     %title This is the Title in a title tag within the head tag  
     %script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
     %script(type="text/javascript" src="https://www.google.com/jsapi")
+    :javascript
+      var data = google.visualization.arrayToDataTable([
+          ['Day', 'Unstarted', 'Started', 'Finished', 'Delivered', 'Accepted', 'Rejected'],
+          - @data.each do |data|
+            [data.created_at, data.unstarted, data.started,  data.finished,
+              data.delivered, data.accepted,  data.rejected],
+       ]);
   %body  
     %h1 Current Sprint
 
@@ -14,11 +21,6 @@
         google.setOnLoadCallback(drawChart);
 
         function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Day', 'Unstarted', 'Started', 'Finished', 'Delivered', 'Accepted', 'Rejected'],
-                ['25/2', #{PT.sum("unstarted")}, #{PT.sum("started")},  #{PT.sum("finished")},
-                  #{PT.sum("delivered")},  #{PT.sum("accepted")},  #{PT.sum("rejected")}],
-             ]);
 
              var options = {
                  isStacked: true,
