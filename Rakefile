@@ -35,7 +35,7 @@ namespace :pt do
         project_id:          ENV['PIVOTAL_PROJECTS'].to_i,
         created_at:          Time.now.utc,
         iteration:           PT.current_iteration.number,
-        iteration_starts_on: PT.current_iteration.start
+        iteration_starts_on: PT.current_iteration.start,
         iteration_ends_on:   PT.current_iteration.finish
       )
 
