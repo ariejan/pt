@@ -5,12 +5,10 @@
     %script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
     %script(type="text/javascript" src="https://www.google.com/jsapi")
     %scipt(type="text/javascript")
-      var data = google.visualization.arrayToDataTable([
-        ['Day', 'Unstarted', 'Started', 'Finished', 'Delivered', 'Accepted', 'Rejected'],
-          - @data.each do |data|
-            [data.created_at, data.unstarted, data.started,  data.finished,
-              data.delivered, data.accepted,  data.rejected],
-        ]);
+      var data = google.visualization.arrayToDataTable([['Day', 'Unstarted', 'Started', 'Finished', 'Delivered', 'Accepted', 'Rejected'],
+      - @data.each do |data|
+        [data.created_at, data.unstarted, data.started,  data.finished, data.delivered, data.accepted,  data.rejected],
+      ]);
   %body  
     %h1 Current Sprint
 
