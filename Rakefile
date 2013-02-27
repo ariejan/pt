@@ -36,7 +36,7 @@ namespace :pt do
         created_at:          Time.now.utc,
         iteration:           PT.current_iteration.number,
         iteration_starts_on: PT.current_iteration.start,
-        iteration_ends_on:   PT.current_iteration.finish
+        iteraion_ends_on:   PT.current_iteration.finish
       )
 
       puts "Metrics saved."
